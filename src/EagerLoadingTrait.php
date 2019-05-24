@@ -1,8 +1,14 @@
 <?php namespace Sb\Framework\Mvc\Model;
 
+use Phalcon\Mvc\ModelInterface;
+use Phalcon\Mvc\Model\Resultset\Simple;
 use Sb\Framework\Mvc\Model\EagerLoading\Loader;
 
-trait EagerLoadingTrait {
+/**
+ * Trait EagerLoadingTrait
+ * @package Sb\Framework\Mvc\Model
+ */
+trait EagerLoadingTrait{
 
 	/**
 	 * <code>
@@ -24,7 +30,7 @@ trait EagerLoadingTrait {
 	 * </code>
 	 *
 	 * @param mixed ...$arguments
-	 * @return Phalcon\Mvc\ModelInterface[]
+	 * @return ModelInterface[]
 	 */
 	static public function with(...$arguments) {
 		if (! empty ($arguments)) {
@@ -47,6 +53,9 @@ trait EagerLoadingTrait {
 		}
 
 		$ret = static::find($parameters);
+        /**
+         * @var Simple $ret
+         */
 
 		if ($ret->count()) {
 			$ret = Loader::fromResultset($ret, ...$arguments);
@@ -59,7 +68,7 @@ trait EagerLoadingTrait {
 	 * Same as EagerLoadingTrait::with() for a single record
 	 *
 	 * @param mixed ...$arguments
-	 * @return false|Phalcon\Mvc\ModelInterface
+	 * @return false|ModelInterface
 	 */
 	static public function findFirstWith(...$arguments) {
 		if (! empty ($arguments)) {
@@ -88,23 +97,27 @@ trait EagerLoadingTrait {
 		return $ret;
 	}
 
-	/**
-	 * <code>
-	 * <?php
-	 *
-	 * $manufacturer = Manufacturer::findFirstById(51);
-	 *
-	 * $manufacturer->load('Robots.Parts');	
-	 *
-	 * foreach ($manufacturer->robots as $robot) {
-	 *    foreach ($robot->parts as $part) { ... }
-	 * }
-	 * </code>
-	 *
-	 * @param mixed ...$arguments
-	 * @return self
-	 */
+    /**
+     * <code>
+     * <?php
+     *
+     * $manufacturer = Manufacturer::findFirstById(51);
+     *
+     * $manufacturer->load('Robots.Parts');
+     *
+     * foreach ($manufacturer->robots as $robot) {
+     *    foreach ($robot->parts as $part) { ... }
+     * }
+     * </code>
+     *
+     * @param mixed ...$arguments
+     *
+     * @return ModelInterface
+     */
 	public function load(...$arguments) {
+        /**
+         * @var ModelInterface $this
+         */
 		return Loader::fromModel($this, ...$arguments);
 	}
 }
